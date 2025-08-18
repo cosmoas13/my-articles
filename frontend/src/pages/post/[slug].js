@@ -7,8 +7,6 @@ import {
 	Categories,
 	PostWidget,
 	Author,
-	Comments,
-	CommentsForm,
 	Loader
 } from '../../components/elements/Blog';
 import Header from '../../components/elements/Header';
@@ -28,8 +26,11 @@ function PostDetails({ post }) {
 					<div className='col-span-1 lg:col-span-8'>
 						<PostDetail post={post} />
 						<Author author={post.author} />
-						<CommentsForm slug={post.slug} />
-						<Comments slug={post.slug} />
+						{/* Komponen Comments dan CommentsForm belum diimplementasikan */}
+						<div className="bg-white shadow-lg rounded-lg p-8 pb-12 mb-8">
+							<h3 className="text-xl mb-8 font-semibold border-b pb-4">Comments</h3>
+							<p>Comments feature will be available soon.</p>
+						</div>
 					</div>
 					<div className='col-span-1 lg:col-span-4'>
 						<div className='relative lg:sticky top-28'>

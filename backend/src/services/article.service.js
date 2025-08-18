@@ -18,12 +18,12 @@ class ArticleService {
   }
 
   /**
-   * Get all articles with pagination
+   * Get all articles with pagination and search
    * @param {Object} options - Query options
    * @returns {Promise<Object>} - Articles with pagination info
    */
   async getArticles(options = {}) {
-    const { page = 1, limit = 10, published = true, categoryId, authorId } = options;
+    const { page = 1, limit = 10, published = true, categoryId, authorId, search } = options;
     const offset = (page - 1) * limit;
     
     // Build where conditions
@@ -39,6 +39,13 @@ class ArticleService {
     
     if (authorId) {
       whereConditions.push(eq(articles.authorId, authorId));
+    }
+    
+    // Add search condition if search query is provided
+    if (search) {
+      whereConditions.push(
+        sql`(${articles.title} ILIKE ${'%' + search + '%'} OR ${articles.content} ILIKE ${'%' + search + '%'} OR ${articles.excerpt} ILIKE ${'%' + search + '%'})`
+      );
     }
     
     // Get total count for pagination

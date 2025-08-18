@@ -26,14 +26,15 @@ class ArticleController {
   }
   async getArticles(req, res) {
     try {
-      const { page, limit, published, categoryId, authorId } = req.query;
+      const { page, limit, published, categoryId, authorId, search } = req.query;
 
       const options = {
         page: page ? parseInt(page) : 1,
         limit: limit ? parseInt(limit) : 10,
         published: published === undefined ? true : published === 'true',
         categoryId: categoryId || undefined,
-        authorId: authorId || undefined
+        authorId: authorId || undefined,
+        search: search || undefined
       };
 
       const result = await articleService.getArticles(options);

@@ -31,33 +31,33 @@ export default class Header extends Component {
 					<div className='flex flex-col px-4 md:hidden'>
 						{headerList.map((item, index) => {
 							return (
-								<a className='text-white py-1 px-10 cursor-pointer' key={index}>
-									<LinkScroll
-										activeClass='active'
-										to={item.to}
-										spy={true}
-										smooth={true}
-										offset={-220}
-										duration={500}
-									>
-										<p className='hover:bg-gray-500 rounded-md'>{item.name}</p>
-									</LinkScroll>
-								</a>
+								<LinkScroll
+									activeClass='active'
+									to={item.to}
+									spy={true}
+									smooth={true}
+									offset={-220}
+									duration={500}
+									key={index}
+									className='text-white py-1 px-10 cursor-pointer'
+								>
+									<p className='hover:bg-gray-500 rounded-md'>{item.name}</p>
+								</LinkScroll>
 							);
 						})}
-						<a className='text-white py-1 px-10 cursor-pointer'>
-							<Link passHref href='/blog'>
+						<Link passHref href='/blog'>
+							<div className='text-white py-1 px-10 cursor-pointer'>
 								<p className='hover:bg-gray-500 rounded-md'>Blog</p>
-							</Link>
-						</a>
+							</div>
+						</Link>
 					</div>
 				) : (
 					<div className='flex flex-col px-4 md:hidden'>
-						<a className='text-white py-1 px-10 cursor-pointer'>
-							<Link passHref href='/'>
+						<Link passHref href='/'>
+							<div className='text-white py-1 px-10 cursor-pointer'>
 								<p className='hover:bg-gray-500 rounded-md'>Portfolio</p>
-							</Link>
-						</a>
+							</div>
+						</Link>
 					</div>
 				)}
 			</div>
@@ -94,24 +94,25 @@ export default class Header extends Component {
 												offset={-200}
 												duration={500}
 												key={index}
+												className='flex justify-center w-20 h-6 mx-auto text-white cursor-pointer hover:bg-gray-500 rounded-md'
 											>
-												<a className='flex justify-center w-20 h-6 mx-auto text-white cursor-pointer hover:bg-gray-500 rounded-md'>
-													{item.name}
-												</a>
+												{item.name}
 											</LinkScroll>
 										);
 									})}
-									<p className='flex justify-center w-20 h-6 mx-auto text-white cursor-pointer hover:bg-gray-500 rounded-md'>
-										<Link href='/blog'>Blog</Link>
-									</p>
+									<Link href='/blog'>
+										<div className='flex justify-center w-20 h-6 mx-auto text-white cursor-pointer hover:bg-gray-500 rounded-md'>
+											Blog
+										</div>
+									</Link>
 								</div>
 							) : (
 								<div className='hidden space-x-8 lg:flex'>
-									<div className='flex justify-center w-20 h-6 mx-auto text-white cursor-pointer hover:bg-gray-500 rounded-md'>
-										<Link passHref href='/'>
-											<p>Portfolio</p>
-										</Link>
-									</div>
+									<Link passHref href='/'>
+										<div className='flex justify-center w-20 h-6 mx-auto text-white cursor-pointer hover:bg-gray-500 rounded-md'>
+											Portfolio
+										</div>
+									</Link>
 								</div>
 							)}
 							<div

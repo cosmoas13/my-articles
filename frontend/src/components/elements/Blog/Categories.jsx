@@ -7,12 +7,24 @@ const Categories = () => {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
+    let isMounted = true;
     getCategories().then((newCategories) => {
-      setCategories(newCategories);
+      // Tambahkan slug ke setiap kategori dan update state hanya jika komponen masih terpasang
+      if (isMounted) {
+        const categoriesWithSlug = newCategories.map(category => ({
+          ...category,
+          slug: category.name.toLowerCase().replace(/\s+/g, '-')
+        }));
+        setCategories(categoriesWithSlug);
+      }
     });
+    
+    // Cleanup function untuk mencegah update state setelah komponen unmount
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
-  console.log(categories, "categories");
   return (
     <div className="bg-white shadow-lg rounded-lg p-8 pb-12 mb-8">
       <h3 className="text-xl mb-8 font-semibold border-b pb-4">Categories</h3>

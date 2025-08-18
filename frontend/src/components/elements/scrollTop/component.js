@@ -9,6 +9,13 @@ export default class ScrollTop extends Component {
 
   componentDidMount() {
     this._handleToggleVisible();
+    // Tambahkan event listener saat komponen di-mount
+    window.addEventListener('scroll', this._handleToggleVisible);
+  }
+  
+  componentWillUnmount() {
+    // Hapus event listener saat komponen di-unmount untuk mencegah memory leak
+    window.removeEventListener('scroll', this._handleToggleVisible);
   }
 
   _handleToggleVisible = () => {
@@ -33,9 +40,7 @@ export default class ScrollTop extends Component {
   }
 
   render() {
-    if (typeof window !== 'undefined') {
-      window.addEventListener('scroll', this._handleToggleVisible)
-    }
+    // Event listener sudah ditambahkan di componentDidMount dan dihapus di componentWillUnmount
     return (
       <div className={`animate-bounce fixed right-3 bottom-3 z-10 cursor-pointer ${this.state.visible ? 'inline' : 'hidden'}`}>
         <div className='flex items-center justify-center rounded-full w-14 h-14 mx-2 bg-slate-400 hover:bg-slate-500 cursor-pointer transition duration-150 ease-in-out' onClick={this._handleScrollToTop}>
