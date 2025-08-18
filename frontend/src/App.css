@@ -1,0 +1,168 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  transition: background-color 0.3s ease;
+}
+
+body.dark {
+  background-color: #1a1a1a;
+  color: #f5f5f5;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 80vh;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  padding: 1rem;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.app-container.dark {
+  background-color: #2a2a2a;
+  color: #f5f5f5;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+}
+
+header {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #eaeaea;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.app-container.dark header {
+  border-bottom: 1px solid #444;
+}
+
+header h1 {
+  color: #333;
+  font-size: 2rem;
+  margin: 0;
+}
+
+.app-container.dark header h1 {
+  color: #f5f5f5;
+}
+
+.theme-toggle {
+  background-color: transparent;
+  border: 1px solid #646cff;
+  color: #646cff;
+  padding: 0.4em 0.8em;
+}
+
+.app-container.dark .theme-toggle {
+  border-color: #a3a8ff;
+  color: #a3a8ff;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  padding: 2em;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
+  transition: background-color 0.3s ease;
+}
+
+.app-container.dark .card {
+  background-color: #3a3a3a;
+}
+
+.card h2 {
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.app-container.dark .card h2 {
+  color: #f5f5f5;
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+button {
+  background-color: #646cff;
+  color: white;
+  border: none;
+  padding: 0.6em 1.2em;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #535bf2;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+label {
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+input {
+  padding: 0.6em;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.app-container.dark input {
+  background-color: #444;
+  border-color: #555;
+  color: #f5f5f5;
+}
+
+.greeting {
+  margin-top: 1rem;
+  font-weight: bold;
+  color: #646cff;
+}
+
+.app-container.dark .greeting {
+  color: #a3a8ff;
+}
+
+footer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eaeaea;
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.app-container.dark footer {
+  border-top: 1px solid #444;
+}
