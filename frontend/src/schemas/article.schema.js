@@ -8,5 +8,5 @@ export const articleSchema = z.object({
   tags: z.array(
     z.string().min(1, 'Tag tidak boleh kosong')
   ).optional().default([]),
-  published: z.boolean().default(false),
+  isPublished: z.boolean().default(false), // Ubah dari published menjadi isPublished
 });

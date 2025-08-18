@@ -41,7 +41,10 @@ export const useUpdateArticle = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: ({ id, articleData }) => ArticleService.updateArticle(id, articleData),
+    mutationFn: ({ id, ...articleData }) => {
+      console.log('useUpdateArticle received:', { id, ...articleData });
+      return ArticleService.updateArticle(id, articleData);
+    },
     onSuccess: (data, variables) => {
       // Update cache untuk artikel yang diupdate
       queryClient.invalidateQueries({ queryKey: ['article', variables.id] });

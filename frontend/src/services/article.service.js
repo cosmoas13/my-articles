@@ -66,7 +66,20 @@ const ArticleService = {
    * @returns {Promise<Object>} - Created article
    */
   createArticle: async (articleData) => {
-    const response = await axiosInstance.post('/articles', articleData);
+    // Ubah isPublished menjadi published untuk backend
+    const dataToSend = {
+      ...articleData,
+      published: articleData.isPublished
+    };
+    
+    // Hapus isPublished karena backend menggunakan published
+    if ('isPublished' in dataToSend) {
+      delete dataToSend.isPublished;
+    }
+    
+    console.log('Data yang dikirim ke backend:', dataToSend);
+    
+    const response = await axiosInstance.post('/articles', dataToSend);
     return response.data;
   },
 
@@ -77,7 +90,20 @@ const ArticleService = {
    * @returns {Promise<Object>} - Updated article
    */
   updateArticle: async (id, articleData) => {
-    const response = await axiosInstance.put(`/articles/${id}`, articleData);
+    // Ubah isPublished menjadi published untuk backend
+    const dataToSend = {
+      ...articleData,
+      published: articleData.isPublished
+    };
+    
+    // Hapus isPublished karena backend menggunakan published
+    if ('isPublished' in dataToSend) {
+      delete dataToSend.isPublished;
+    }
+    
+    console.log('Data update yang dikirim ke backend:', dataToSend);
+    
+    const response = await axiosInstance.put(`/articles/${id}`, dataToSend);
     return response.data;
   },
 

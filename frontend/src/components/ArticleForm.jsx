@@ -18,7 +18,7 @@ const ArticleForm = ({ article = null }) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
     setValue,
     watch
   } = useZodForm(articleSchema);
@@ -27,11 +27,16 @@ const ArticleForm = ({ article = null }) => {
 
   // Mengisi form dengan data artikel jika dalam mode edit
   useEffect(() => {
+    // Set default value untuk isPublished
+    setValue('isPublished', false);
+    console.log('Default isPublished set to false');
+
     if (article) {
       setValue('title', article.title);
       setValue('content', article.content);
       setValue('categoryId', article.categoryId);
-      setValue('isPublished', article.isPublished);
+      setValue('isPublished', article.published || false); // Gunakan published dari backend
+      console.log('Article isPublished value:', article.published);
 
       if (article.tags) {
         setSelectedTags(article.tags.map(tag => ({ id: tag.id, name: tag.name })));
@@ -40,10 +45,14 @@ const ArticleForm = ({ article = null }) => {
   }, [article, setValue]);
 
   const onSubmit = (data) => {
+    console.log('Form data before submit:', data); // Log data sebelum dikirim
     const articleData = {
       ...data,
-      tags: selectedTags.map(tag => tag.id)
+      tags: selectedTags.map(tag => tag.id),
+      isPublished: data.isPublished // Pastikan isPublished dimasukkan
     };
+
+    console.log('Article data to be sent:', articleData); // Log data yang akan dikirim
 
     if (isEditing) {
       updateArticle({ id: article.id, ...articleData });
@@ -212,6 +221,10 @@ const ArticleForm = ({ article = null }) => {
               id="isPublished"
               className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
               {...register('isPublished')}
+              onChange={(e) => {
+                setValue('isPublished', e.target.checked);
+                console.log('Checkbox changed:', e.target.checked);
+              }}
               disabled={isPending}
             />
             <label
@@ -225,7 +238,7 @@ const ArticleForm = ({ article = null }) => {
           <div className="pt-4">
             <button
               type="submit"
-              disabled={isPending}
+              disabled={isPending || !isValid}
               className="w-full md:w-auto px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
               {isPending
