@@ -1,68 +1,70 @@
 import { useState, useEffect } from 'react'
 import './App.css'
+import { LoginForm, ArticleList, ArticleDetail, ArticleForm } from './components'
+import { useProfile } from './hooks'
 
 function App() {
-  const [count, setCount] = useState(0)
-  const [name, setName] = useState('')
-  const [greeting, setGreeting] = useState('')
+  const [currentView, setCurrentView] = useState('articles')
+  const [selectedArticleId, setSelectedArticleId] = useState(null)
   const [theme, setTheme] = useState('light')
+  const { data: userProfile, isSuccess: isLoggedIn } = useProfile()
 
   useEffect(() => {
     document.body.className = theme
   }, [theme])
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    if (name.trim()) {
-      setGreeting(`Halo, ${name}!`)
-    }
-  }
-
   const toggleTheme = () => {
     setTheme(theme === 'light' ? 'dark' : 'light')
+  }
+
+  const renderContent = () => {
+    switch (currentView) {
+      case 'login':
+        return <LoginForm />
+      case 'articles':
+        return <ArticleList onSelectArticle={(id) => {
+          setSelectedArticleId(id)
+          setCurrentView('article-detail')
+        }} />
+      case 'article-detail':
+        return <ArticleDetail articleId={selectedArticleId} />
+      case 'create-article':
+        return <ArticleForm />
+      case 'edit-article':
+        return <ArticleForm article={{ id: selectedArticleId }} />
+      default:
+        return <LoginForm />
+    }
   }
 
   return (
     <div className={`app-container ${theme}`}>
       <header>
-        <h1>Aplikasi React Sederhana</h1>
+        <h1 onClick={() => setCurrentView('articles')} className="site-title">Green Blog</h1>
+        <nav>
+          <button onClick={() => setCurrentView('articles')}>Beranda</button>
+          {isLoggedIn ? (
+            <>
+              <button onClick={() => setCurrentView('create-article')}>Buat Artikel</button>
+              <button className="profile-button">
+                {userProfile?.name || 'Profil'}
+              </button>
+            </>
+          ) : (
+            <button onClick={() => setCurrentView('login')} className="login-button">Login</button>
+          )}
+        </nav>
         <button className="theme-toggle" onClick={toggleTheme}>
           {theme === 'light' ? '🌙 Mode Gelap' : '☀️ Mode Terang'}
         </button>
       </header>
       
       <main>
-        <div className="card">
-          <h2>Counter Sederhana</h2>
-          <p>Nilai saat ini: {count}</p>
-          <div className="button-group">
-            <button onClick={() => setCount(count - 1)}>Kurang</button>
-            <button onClick={() => setCount(count + 1)}>Tambah</button>
-            <button onClick={() => setCount(0)}>Reset</button>
-          </div>
-        </div>
-
-        <div className="card form-card">
-          <h2>Form Sederhana</h2>
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="name">Nama:</label>
-              <input 
-                type="text" 
-                id="name" 
-                value={name} 
-                onChange={(e) => setName(e.target.value)} 
-                placeholder="Masukkan nama Anda"
-              />
-            </div>
-            <button type="submit">Kirim</button>
-          </form>
-          {greeting && <p className="greeting">{greeting}</p>}
-        </div>
+        {renderContent()}
       </main>
       
       <footer>
-        <p>Dibuat dengan React dan Vite</p>
+        <p>Dibuat dengan React, React Query, dan React Hook Form</p>
       </footer>
     </div>
   )

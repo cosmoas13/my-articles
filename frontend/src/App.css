@@ -9,6 +9,7 @@
 body {
   margin: 0;
   transition: background-color 0.3s ease;
+  background-color: #f8f9fa;
 }
 
 body.dark {
@@ -25,10 +26,12 @@ body.dark {
   background-color: #ffffff;
   padding: 1rem;
   transition: background-color 0.3s ease, color 0.3s ease;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .app-container.dark {
-  background-color: #2a2a2a;
+  background-color: #1e2a23;
   color: #f5f5f5;
   box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
 }
@@ -40,6 +43,95 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+}
+
+.dark header {
+  border-bottom: 1px solid #2c3c33;
+}
+
+header .site-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #2c6e49;
+  cursor: pointer;
+  margin: 0;
+  text-align: left;
+}
+
+.dark header .site-title {
+  color: #4ecca3;
+}
+
+header nav {
+  display: flex;
+  gap: 1rem;
+  margin: 0 1rem;
+}
+
+header button {
+  background-color: transparent;
+  border: none;
+  color: #2c6e49;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+header button:hover {
+  background-color: rgba(44, 110, 73, 0.1);
+}
+
+.dark header button {
+  color: #4ecca3;
+}
+
+.dark header button:hover {
+  background-color: rgba(78, 204, 163, 0.1);
+}
+
+header .login-button {
+  background-color: #2c6e49;
+  color: white;
+}
+
+.dark header .login-button {
+  background-color: #4ecca3;
+  color: #1e2a23;
+}
+
+header .profile-button {
+  background-color: rgba(44, 110, 73, 0.1);
+}
+
+.dark header .profile-button {
+  background-color: rgba(78, 204, 163, 0.1);
+}
+
+/* Tema hijau untuk tombol */
+header nav button {
+  background-color: #2c6e49;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+header nav button:hover {
+  background-color: #1e4d33;
+}
+
+.app-container.dark header nav button {
+  background-color: #4ecca3;
+  color: #1e2a23;
+}
+
+.app-container.dark header nav button:hover {
+  background-color: #3db892;
 }
 
 .app-container.dark header {
@@ -73,17 +165,19 @@ main {
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  justify-content: center;
-  align-items: center;
+  width: 100%;
+  text-align: left;
 }
 
 .card {
   padding: 2em;
-  background-color: #f9f9f9;
+  background-color: white;
   border-radius: 8px;
   width: 100%;
-  max-width: 500px;
+  max-width: 1000px;
+  margin: 0 auto;
   transition: background-color 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .app-container.dark .card {
@@ -97,6 +191,390 @@ main {
 
 .app-container.dark .card h2 {
   color: #f5f5f5;
+}
+
+/* Form styles */
+.form-group {
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  background-color: white;
+  color: #333;
+}
+
+.app-container.dark .form-group input,
+.app-container.dark .form-group textarea,
+.app-container.dark .form-group select {
+  background-color: #444;
+  border-color: #555;
+  color: #f5f5f5;
+}
+
+.form-group textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.error {
+  color: #e53935;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+.form-check {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.form-check input {
+  margin-right: 0.5rem;
+}
+
+button {
+  background-color: #646cff;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 1rem;
+}
+
+button:hover {
+  background-color: #535bf2;
+}
+
+button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.app-container.dark button:disabled {
+  background-color: #555;
+}
+
+/* Article list styles */
+.article-list {
+  width: 100%;
+}
+
+.article-list h2 {
+  color: #2c6e49;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.app-container.dark .article-list h2 {
+  color: #4ecca3;
+}
+
+.filters {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background-color: #f5f7f5;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.app-container.dark .filters {
+  background-color: #2a3c33;
+}
+
+.filters form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.filters form input {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 0.5rem;
+}
+
+.app-container.dark .filters form input {
+  background-color: #1e2a23;
+  border-color: #2c3c33;
+  color: #f5f5f5;
+}
+
+.filters form button,
+.filters select {
+  background-color: #2c6e49;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.filters form button:hover,
+.filters select:hover {
+  background-color: #1e4d33;
+}
+
+.app-container.dark .filters form button,
+.app-container.dark .filters select {
+  background-color: #4ecca3;
+  color: #1e2a23;
+}
+
+.app-container.dark .filters form button:hover,
+.app-container.dark .filters select:hover {
+  background-color: #3db892;
+}
+
+.articles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.article-card {
+  border: none;
+  border-radius: 8px;
+  padding: 1.5rem;
+  transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s;
+  cursor: pointer;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  position: relative;
+}
+
+.article-card::after {
+  content: "Klik untuk melihat detail";
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: #2c6e49;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.article-card:hover::after {
+  opacity: 1;
+}
+
+.dark .article-card::after {
+  background-color: #4ecca3;
+  color: #1e2a23;
+}
+
+.article-card h3 {
+  margin-top: 0;
+  color: #2c6e49;
+  font-size: 1.4rem;
+}
+
+.app-container.dark .article-card h3 {
+  color: #4ecca3;
+}
+
+.app-container.dark .article-card {
+  background-color: #2a3c33;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.article-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(44, 110, 73, 0.15);
+}
+
+.app-container.dark .article-card:hover {
+  box-shadow: 0 6px 12px rgba(78, 204, 163, 0.2);
+}
+
+.article-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  color: #666;
+  margin-top: 1rem;
+}
+
+.app-container.dark .article-meta {
+  color: #aaa;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  gap: 1rem;
+}
+
+/* Article detail styles */
+.article-detail {
+  text-align: left;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.article-detail h1 {
+  margin-bottom: 0.5rem;
+}
+
+.article-content {
+  margin: 2rem 0;
+  line-height: 1.6;
+}
+
+.article-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.tag {
+  background-color: #f0f0f0;
+  color: #333;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+.app-container.dark .tag {
+  background-color: #444;
+  color: #f5f5f5;
+}
+
+.tag button {
+  background: none;
+  border: none;
+  color: #666;
+  margin-left: 0.25rem;
+  padding: 0;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.app-container.dark .tag button {
+  color: #aaa;
+}
+
+.new-tag {
+  border: 1px dashed #646cff;
+}
+
+.app-container.dark .new-tag {
+  border-color: #535bf2;
+}
+
+/* Comments section */
+.comments-section {
+  margin-top: 3rem;
+  border-top: 1px solid #eaeaea;
+  padding-top: 1.5rem;
+}
+
+.app-container.dark .comments-section {
+  border-top-color: #444;
+}
+
+.comment-form {
+  margin-bottom: 2rem;
+}
+
+.comments-list {
+  margin-top: 2rem;
+}
+
+.comment {
+  border-bottom: 1px solid #eaeaea;
+  padding: 1rem 0;
+  text-align: left;
+}
+
+.app-container.dark .comment {
+  border-bottom-color: #444;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.app-container.dark .comment-header {
+  color: #aaa;
+}
+
+.error-message {
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 0.75rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.app-container.dark .error-message {
+  background-color: #4a1e1e;
+  color: #ff8a80;
+}
+
+/* Tag input */
+.tag-input {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.selected-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.form-actions {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.publish-note {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.app-container.dark .publish-note {
+  color: #aaa;
 }
 
 .button-group {
@@ -161,8 +639,10 @@ footer {
   border-top: 1px solid #eaeaea;
   color: #888;
   font-size: 0.9rem;
+  text-align: center;
 }
 
 .app-container.dark footer {
-  border-top: 1px solid #444;
+  border-top: 1px solid #2c3c33;
+  color: #aaa;
 }
