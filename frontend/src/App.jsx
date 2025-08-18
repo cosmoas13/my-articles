@@ -7,7 +7,12 @@ function App() {
   const [currentView, setCurrentView] = useState('articles')
   const [selectedArticleId, setSelectedArticleId] = useState(null)
   const [theme, setTheme] = useState('light')
-  const { data: userProfile, isSuccess: isLoggedIn } = useProfile()
+  const { data: userProfile, isSuccess: isLoggedIn, refetch: refetchProfile, isLoading: isProfileLoading } = useProfile()
+  
+  // Debug untuk melihat status profil
+  useEffect(() => {
+    console.log('Profile status:', { isLoggedIn, userProfile, isProfileLoading })
+  }, [isLoggedIn, userProfile, isProfileLoading])
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', theme === 'dark')
@@ -17,10 +22,24 @@ function App() {
     setTheme(theme === 'light' ? 'dark' : 'light')
   }
 
+  const handleLoginSuccess = () => {
+    console.log('Login success handler called');
+    // Refetch profile setelah login berhasil
+    refetchProfile()
+      .then(result => {
+        console.log('Profile refetch result:', result.data);
+        // Redirect ke halaman utama setelah login berhasil
+        setCurrentView('articles');
+      })
+      .catch(error => {
+        console.error('Error fetching profile:', error);
+      });
+  };
+
   const renderContent = () => {
     switch (currentView) {
       case 'login':
-        return <LoginForm />
+        return <LoginForm onLoginSuccess={handleLoginSuccess} />
       case 'articles':
         return <ArticleList onSelectArticle={(id) => {
           setSelectedArticleId(id)
@@ -29,11 +48,11 @@ function App() {
       case 'article-detail':
         return <ArticleDetail articleId={selectedArticleId} />
       case 'create-article':
-        return isLoggedIn ? <ArticleForm /> : <LoginForm />
+        return isLoggedIn ? <ArticleForm /> : <LoginForm onLoginSuccess={handleLoginSuccess} />
       case 'edit-article':
-        return isLoggedIn ? <ArticleForm article={{ id: selectedArticleId }} /> : <LoginForm />
+        return isLoggedIn ? <ArticleForm article={{ id: selectedArticleId }} /> : <LoginForm onLoginSuccess={handleLoginSuccess} />
       default:
-        return <LoginForm />
+        return <LoginForm onLoginSuccess={handleLoginSuccess} />
     }
   }
 
@@ -71,7 +90,10 @@ function App() {
                     <PenSquare size={18} className="mr-1.5" />
                     Tulis
                   </button>
-                  <button className="px-4 py-2 rounded-lg transition-all duration-200 flex items-center bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+                  <button 
+                    className="px-4 py-2 rounded-lg transition-all duration-200 flex items-center bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                    onClick={() => console.log('Current user profile:', userProfile)}
+                  >
                     <User size={18} className="mr-1.5" />
                     {userProfile?.name || 'Profil'}
                   </button>
@@ -119,12 +141,13 @@ function App() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <button
-                onClick={() => isLoggedIn ? setCurrentView('create-article') : setCurrentView('login')}
-                className="bg-primary-600 hover:bg-primary-700 text-white font-medium py-3 px-8 rounded-lg transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg inline-flex items-center justify-center"
-              >
-                <PenSquare size={18} className="mr-2" />
-                {isLoggedIn ? 'Mulai Menulis' : 'Login untuk Menulis'}
-              </button>
+                  onClick={() => isLoggedIn ? setCurrentView('create-article') : setCurrentView('login')}
+                  className="bg-primary-600 hover:bg-primary-700 text-white font-medium py-3 px-8 rounded-lg transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg inline-flex items-center justify-center"
+                >
+                  <PenSquare size={18} className="mr-2" />
+                  {/* Gunakan localStorage untuk memeriksa token secara langsung */}
+                  {localStorage.getItem('accessToken') ? 'Mulai Menulis' : 'Login untuk Menulis'}
+                </button>
 
                 <button
                   onClick={() => window.scrollTo({ top: document.getElementById('article-list').offsetTop - 100, behavior: 'smooth' })}

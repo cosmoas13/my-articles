@@ -17,14 +17,22 @@ export const commentSchema = z.object({
 // Skema validasi untuk komentar dengan kondisi dinamis
 export const getDynamicCommentSchema = (isAnonymous) => {
   if (isAnonymous) {
-    return commentSchema;
+    // Jika anonim, nama dan email tidak diperlukan
+    return z.object({
+      content: z.string().min(3, 'Komentar harus minimal 3 karakter').max(500, 'Komentar maksimal 500 karakter'),
+      articleId: z.string().min(1, 'ID artikel tidak boleh kosong'),
+      isAnonymous: z.boolean().default(true),
+      name: z.string().optional(),
+      email: z.string().optional()
+    });
   } else {
-    return commentSchema.refine(
-      (data) => !!data.name,
-      {
-        message: 'Nama harus diisi jika tidak anonim',
-        path: ['name'],
-      }
-    );
+    // Jika tidak anonim, nama wajib diisi
+    return z.object({
+      content: z.string().min(3, 'Komentar harus minimal 3 karakter').max(500, 'Komentar maksimal 500 karakter'),
+      articleId: z.string().min(1, 'ID artikel tidak boleh kosong'),
+      isAnonymous: z.boolean().default(false),
+      name: z.string().min(3, 'Nama harus minimal 3 karakter').max(50, 'Nama maksimal 50 karakter'),
+      email: z.string().email('Format email tidak valid').optional()
+    })
   }
 };

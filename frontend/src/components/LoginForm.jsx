@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useZodForm, useLogin } from '../hooks';
 import { loginSchema } from '../schemas';
 
-const LoginForm = () => {
+const LoginForm = ({ onLoginSuccess }) => {
   const [loginError, setLoginError] = useState('');
   const { mutate: login, isPending } = useLogin();
   
@@ -15,12 +15,20 @@ const LoginForm = () => {
 
   const onSubmit = (data) => {
     setLoginError('');
+    console.log('Attempting login with:', data.email);
     login(data, {
-      onSuccess: () => {
-        console.log('Login berhasil');
+      onSuccess: (response) => {
+        console.log('Login berhasil:', response);
+        console.log('Access token in localStorage:', localStorage.getItem('accessToken'));
         reset();
+        // Panggil callback onLoginSuccess jika tersedia
+        if (onLoginSuccess) {
+          console.log('Calling onLoginSuccess callback');
+          onLoginSuccess();
+        }
       },
       onError: (error) => {
+        console.error('Login error:', error);
         setLoginError(error.response?.data?.message || 'Login gagal');
       }
     });

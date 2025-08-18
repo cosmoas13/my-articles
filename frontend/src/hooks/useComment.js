@@ -13,13 +13,20 @@ export const useCreateComment = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: (commentData) => CommentService.createComment(commentData),
-    onSuccess: (data) => {
+    mutationFn: (commentData) => {
+      console.log('useCreateComment - Mutation called with:', commentData);
+      return CommentService.createComment(commentData);
+    },
+    onSuccess: (data, variables) => {
+      console.log('useCreateComment - Mutation succeeded:', data);
       // Invalidate dan refetch comments untuk artikel yang dikomentari
       queryClient.invalidateQueries({ queryKey: ['comments', data.articleId] });
       // Juga invalidate artikel detail karena mungkin menampilkan jumlah komentar
       queryClient.invalidateQueries({ queryKey: ['article', data.articleId] });
     },
+    onError: (error, variables) => {
+      console.error('useCreateComment - Mutation failed:', error);
+    }
   });
 };
 

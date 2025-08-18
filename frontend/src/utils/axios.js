@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3001/api';
+const API_URL = 'http://localhost:3002/api';
 
 const axiosInstance = axios.create({
   baseURL: API_URL,
@@ -15,6 +15,9 @@ axiosInstance.interceptors.request.use(
     const token = localStorage.getItem('accessToken');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+      console.log(`Request to ${config.url} with token: ${token.substring(0, 10)}...`);
+    } else {
+      console.log(`Request to ${config.url} without token`);
     }
     return config;
   },
@@ -48,11 +51,11 @@ axiosInstance.interceptors.response.use(
           refreshToken,
         });
 
-        if (response.data.accessToken) {
-          localStorage.setItem('accessToken', response.data.accessToken);
+        if (response.data.tokens && response.data.tokens.accessToken) {
+          localStorage.setItem('accessToken', response.data.tokens.accessToken);
           
           // Update token di header request yang gagal dan coba lagi
-          originalRequest.headers.Authorization = `Bearer ${response.data.accessToken}`;
+          originalRequest.headers.Authorization = `Bearer ${response.data.tokens.accessToken}`;
           return axiosInstance(originalRequest);
         }
       } catch (refreshError) {

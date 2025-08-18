@@ -22,8 +22,15 @@ const CommentService = {
    * @returns {Promise<Object>} - Created comment
    */
   createComment: async (commentData) => {
-    const response = await axiosInstance.post('/comments', commentData);
-    return response.data;
+    console.log('CommentService.createComment - Sending data:', commentData);
+    try {
+      const response = await axiosInstance.post('/comments', commentData);
+      console.log('CommentService.createComment - Response:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('CommentService.createComment - Error:', error.response?.data || error.message);
+      throw error;
+    }
   },
 
   /**

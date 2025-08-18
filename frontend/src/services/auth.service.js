@@ -25,11 +25,19 @@ const AuthService = {
     const response = await axiosInstance.post('/auth/login', credentials);
     
     // Store tokens in localStorage
-    if (response.data.accessToken) {
-      localStorage.setItem('accessToken', response.data.accessToken);
+    // Backend mengembalikan token dalam format tokens.accessToken
+    if (response.data.tokens && response.data.tokens.accessToken) {
+      localStorage.setItem('accessToken', response.data.tokens.accessToken);
+      console.log('Access token saved:', response.data.tokens.accessToken.substring(0, 10) + '...');
+    } else {
+      console.error('No access token received from server', response.data);
     }
-    if (response.data.refreshToken) {
-      localStorage.setItem('refreshToken', response.data.refreshToken);
+    
+    if (response.data.tokens && response.data.tokens.refreshToken) {
+      localStorage.setItem('refreshToken', response.data.tokens.refreshToken);
+      console.log('Refresh token saved');
+    } else {
+      console.error('No refresh token received from server', response.data);
     }
     
     return response.data;
@@ -43,8 +51,10 @@ const AuthService = {
   refreshToken: async (refreshToken) => {
     const response = await axiosInstance.post('/auth/refresh-token', { refreshToken });
     
-    if (response.data.accessToken) {
-      localStorage.setItem('accessToken', response.data.accessToken);
+    if (response.data.tokens && response.data.tokens.accessToken) {
+      localStorage.setItem('accessToken', response.data.tokens.accessToken);
+    } else {
+      console.error('No access token received from server during refresh', response.data);
     }
     
     return response.data;
