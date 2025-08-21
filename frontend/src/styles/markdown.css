@@ -10,27 +10,224 @@
   color: inherit;
 }
 
+/* Animasi untuk editor */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
 /* Kustomisasi untuk @uiw/react-md-editor */
 .markdown-editor-wrapper {
   margin-bottom: 1rem;
+  transition: all 0.3s ease;
 }
 
 .w-md-editor {
-  box-shadow: none !important;
-  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+  border: 1px solid #d1fae5 !important;
+  border-radius: 0.5rem !important;
+  overflow: hidden;
+  transition: all 0.3s ease !important;
+}
+
+.w-md-editor:focus-within {
+  border-color: #10b981 !important;
+  box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.1), 0 4px 6px -2px rgba(16, 185, 129, 0.05) !important;
 }
 
 .dark .w-md-editor {
-  border-color: #4b5563;
+  border-color: #065f46 !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1) !important;
+}
+
+.dark .w-md-editor:focus-within {
+  border-color: #059669 !important;
+  box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.2), 0 4px 6px -2px rgba(16, 185, 129, 0.1) !important;
 }
 
 /* Memperbaiki tampilan toolbar */
 .w-md-editor-toolbar {
-  border-bottom: 1px solid #e5e7eb;
+  padding: 0.5rem !important;
+  background-color: #f0fdf4 !important;
+  border-bottom: 1px solid #d1fae5 !important;
+  border-radius: 0.5rem 0.5rem 0 0 !important;
 }
 
 .dark .w-md-editor-toolbar {
+  background-color: #064e3b !important;
+  border-bottom: 1px solid #065f46 !important;
+  border-radius: 0.5rem 0.5rem 0 0 !important;
+}
+
+/* Memperbaiki tampilan tombol toolbar */
+.w-md-editor-toolbar ul > li > button {
+  color: #047857 !important;
+  transition: all 0.2s !important;
+}
+
+.w-md-editor-toolbar ul > li > button:hover {
+  color: #10b981 !important;
+  background-color: #d1fae5 !important;
+}
+
+.dark .w-md-editor-toolbar ul > li > button {
+  color: #34d399 !important;
+}
+
+.dark .w-md-editor-toolbar ul > li > button:hover {
+  color: #6ee7b7 !important;
+  background-color: #065f46 !important;
+}
+
+/* Memperbaiki tampilan tombol toolbar */
+.w-md-editor-toolbar ul li button {
+  color: #4b5563 !important;
+  border-radius: 0.25rem !important;
+  transition: all 0.2s;
+}
+
+.w-md-editor-toolbar ul li button:hover {
+  color: #000 !important;
+  background-color: #e5e7eb !important;
+}
+
+.dark .w-md-editor-toolbar ul li button {
+  color: #9ca3af !important;
+}
+
+.dark .w-md-editor-toolbar ul li button:hover {
+  color: #fff !important;
+  background-color: #374151 !important;
+}
+
+/* Memperbaiki tampilan area teks */
+.w-md-editor-text {
+  padding: 0.5rem !important;
+}
+
+/* Memperbaiki tampilan preview */
+.w-md-editor-preview {
+  padding: 1rem !important;
+  box-shadow: inset 1px 0 0 0 #e5e7eb !important;
+}
+
+.dark .w-md-editor-preview {
+  box-shadow: inset 1px 0 0 0 #4b5563 !important;
+}
+
+/* Memperbaiki tampilan heading di preview */
+.w-md-editor-preview h1 {
+  color: #10b981 !important;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.w-md-editor-preview h2 {
+  color: #059669 !important;
+  border-bottom: 1px solid #f3f4f6;
+  padding-bottom: 0.3rem;
+  margin-bottom: 0.8rem;
+}
+
+.dark .w-md-editor-preview h1 {
+  color: #34d399 !important;
+  border-bottom: 1px solid #374151;
+}
+
+.dark .w-md-editor-preview h2 {
+  color: #10b981 !important;
+  border-bottom: 1px solid #1f2937;
+}
+
+/* Memperbaiki tampilan link di preview */
+.w-md-editor-preview a {
+  color: #059669 !important;
+  text-decoration: underline;
+  transition: all 0.2s;
+}
+
+.w-md-editor-preview a:hover {
+  color: #10b981 !important;
+}
+
+.dark .w-md-editor-preview a {
+  color: #34d399 !important;
+}
+
+.dark .w-md-editor-preview a:hover {
+  color: #6ee7b7 !important;
+}
+
+/* Memperbaiki tampilan textarea */
+.w-md-editor textarea {
+  padding: 0.5rem !important;
+}
+
+/* Memperbaiki tampilan divider */
+.w-md-editor-text-pre > div {
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+}
+
+/* Memperbaiki tampilan blockquote di preview */
+.w-md-editor-preview blockquote {
+  border-left: 4px solid #10b981;
+  padding-left: 1rem;
+  margin-left: 0;
+  color: #4b5563;
+  font-style: italic;
+  background-color: #f9fafb;
+  padding: 0.5rem 1rem;
+  border-radius: 0 0.25rem 0.25rem 0;
+}
+
+.dark .w-md-editor-preview blockquote {
+  border-left: 4px solid #059669;
+  color: #9ca3af;
+  background-color: #1f2937;
+}
+
+/* Memperbaiki tampilan list di preview */
+.w-md-editor-preview ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+}
+
+.w-md-editor-preview ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+}
+
+/* Memperbaiki tampilan tabel di preview */
+.w-md-editor-preview table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+}
+
+.w-md-editor-preview table th,
+.w-md-editor-preview table td {
+  border: 1px solid #e5e7eb;
+  padding: 0.5rem;
+}
+
+.dark .w-md-editor-preview table th,
+.dark .w-md-editor-preview table td {
   border-color: #4b5563;
+}
+
+.w-md-editor-preview table th {
+  background-color: #f3f4f6;
+  font-weight: bold;
+}
+
+.dark .w-md-editor-preview table th {
+  background-color: #374151;
 }
 
 .prose a {
@@ -49,16 +246,20 @@
   height: auto;
 }
 
-/* Perbaikan tampilan kode */
+/* Memperbaiki tampilan kode */
 .prose code {
-  background-color: #f3f4f6;
+  background-color: #ecfdf5;
   padding: 0.2em 0.4em;
   border-radius: 0.25rem;
   font-size: 0.875em;
+  color: #047857;
+  border: 1px solid #d1fae5;
 }
 
 .dark .prose code {
-  background-color: #374151;
+  background-color: #064e3b;
+  color: #6ee7b7;
+  border: 1px solid #065f46;
 }
 
 .prose pre {
@@ -66,10 +267,41 @@
   border-radius: 0.375rem;
   overflow-x: auto;
   padding: 1rem;
+  border-left: 4px solid #10b981;
 }
 
 .dark .prose pre {
   background-color: #1f2937;
+  border-left: 4px solid #059669;
+}
+
+/* Memperbaiki tampilan kode di preview editor */
+.w-md-editor-preview code {
+  background-color: #ecfdf5;
+  padding: 0.2em 0.4em;
+  border-radius: 0.25rem;
+  font-size: 0.875em;
+  color: #047857;
+  border: 1px solid #d1fae5;
+}
+
+.dark .w-md-editor-preview code {
+  background-color: #064e3b;
+  color: #6ee7b7;
+  border: 1px solid #065f46;
+}
+
+.w-md-editor-preview pre {
+  background-color: #f3f4f6;
+  border-radius: 0.375rem;
+  overflow-x: auto;
+  padding: 1rem;
+  border-left: 4px solid #10b981;
+}
+
+.dark .w-md-editor-preview pre {
+  background-color: #1f2937;
+  border-left: 4px solid #059669;
 }
 
 .prose pre code {
