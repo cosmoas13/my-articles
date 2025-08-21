@@ -14,11 +14,11 @@ function ArticlesPage() {
 
         <div className="relative z-10 max-w-3xl mx-auto text-center">
           <h2 className="text-4xl md:text-5xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-primary-700 to-primary-500 dark:from-primary-300 dark:to-primary-500">
-            Selamat Datang di Green Blog
+            Selamat Datang di cosmoas13
           </h2>
 
           <p className="text-gray-700 dark:text-gray-300 text-lg mb-8 max-w-2xl mx-auto leading-relaxed">
-            Platform blogging ramah lingkungan untuk berbagi ide, pengetahuan, dan pengalaman Anda tentang gaya hidup berkelanjutan dan pelestarian lingkungan.
+            Blog pribadi tempat saya berbagi artikel tentang teknologi dan berbagai hal menarik yang saya pelajari, baik di bidang IT maupun bidang lainnya.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

@@ -32,7 +32,7 @@ function Layout({ children }) {
               to="/"
               className="text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-green-400 dark:from-green-400 dark:to-green-300 cursor-pointer"
             >
-              Green Blog
+              cosmoas13
             </Link>
           </div>
 
@@ -100,8 +100,8 @@ function Layout({ children }) {
                 <ImageIcon size={20} className="text-white" />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-primary-400 dark:from-primary-400 dark:to-primary-300">Green Blog</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Platform blogging ramah lingkungan</p>
+                <h3 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-primary-400 dark:from-primary-400 dark:to-primary-300">cosmoas13</h3>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Blog teknologi dan berbagai hal menarik</p>
               </div>
             </div>
 
@@ -119,7 +119,7 @@ function Layout({ children }) {
           </div>
 
           <div className="border-t border-gray-200 dark:border-gray-700 mt-6 pt-6 text-center text-sm text-gray-500 dark:text-gray-400">
-            © {new Date().getFullYear()} Green Blog. All rights reserved.
+            © {new Date().getFullYear()} cosmoas13. All rights reserved.
           </div>
         </div>
       </footer>
