@@ -2,10 +2,12 @@ import LoginForm from './LoginForm';
 import ArticleList from './ArticleList';
 import ArticleDetail from './ArticleDetail';
 import ArticleForm from './ArticleForm';
+import Layout from './Layout';
 
 export {
   LoginForm,
   ArticleList,
   ArticleDetail,
-  ArticleForm
+  ArticleForm,
+  Layout
 };

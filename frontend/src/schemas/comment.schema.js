@@ -11,7 +11,7 @@ export const commentSchema = z.object({
       message: 'Nama harus diisi jika tidak anonim',
       // Kondisional berdasarkan isAnonymous
     }),
-  email: z.string().email('Format email tidak valid').optional(),
+  email: z.string().email('Format email tidak valid').optional().or(z.literal('')),
 });
 
 // Skema validasi untuk komentar dengan kondisi dinamis
@@ -23,7 +23,7 @@ export const getDynamicCommentSchema = (isAnonymous) => {
       isAnonymous: z.boolean().default(true),
       // Menghapus validasi yang tidak diperlukan untuk komentar anonim
       name: z.string().optional(),
-      email: z.string().optional()
+      email: z.string().optional().or(z.literal(''))
     });
   } else {
     // Jika tidak anonim, nama wajib diisi, email opsional
@@ -31,7 +31,7 @@ export const getDynamicCommentSchema = (isAnonymous) => {
       content: z.string().min(1, 'Komentar tidak boleh kosong').max(500, 'Komentar maksimal 500 karakter'),
       isAnonymous: z.boolean().default(false),
       name: z.string().min(2, 'Nama harus minimal 2 karakter').max(50, 'Nama maksimal 50 karakter'),
-      email: z.string().email('Format email tidak valid').optional()
+      email: z.string().email('Format email tidak valid').optional().or(z.literal(''))
     })
   }
 };
