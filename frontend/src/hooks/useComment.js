@@ -17,14 +17,14 @@ export const useCreateComment = () => {
       console.log('useCreateComment - Mutation called with:', commentData);
       return CommentService.createComment(commentData);
     },
-    onSuccess: (data, variables) => {
+    onSuccess: (data) => {
       console.log('useCreateComment - Mutation succeeded:', data);
       // Invalidate dan refetch comments untuk artikel yang dikomentari
       queryClient.invalidateQueries({ queryKey: ['comments', data.articleId] });
       // Juga invalidate artikel detail karena mungkin menampilkan jumlah komentar
       queryClient.invalidateQueries({ queryKey: ['article', data.articleId] });
     },
-    onError: (error, variables) => {
+    onError: (error) => {
       console.error('useCreateComment - Mutation failed:', error);
     }
   });

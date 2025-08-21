@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3002/api';
+const API_URL = 'http://localhost:3001/api';
 
 const axiosInstance = axios.create({
   baseURL: API_URL,
@@ -38,7 +38,7 @@ axiosInstance.interceptors.response.use(
 
       try {
         const refreshToken = localStorage.getItem('refreshToken');
-        
+
         if (!refreshToken) {
           // Jika tidak ada refresh token, logout user
           localStorage.removeItem('accessToken');
@@ -53,7 +53,7 @@ axiosInstance.interceptors.response.use(
 
         if (response.data.tokens && response.data.tokens.accessToken) {
           localStorage.setItem('accessToken', response.data.tokens.accessToken);
-          
+
           // Update token di header request yang gagal dan coba lagi
           originalRequest.headers.Authorization = `Bearer ${response.data.tokens.accessToken}`;
           return axiosInstance(originalRequest);

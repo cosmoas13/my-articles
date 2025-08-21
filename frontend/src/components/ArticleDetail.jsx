@@ -4,7 +4,6 @@ import { getDynamicCommentSchema } from '../schemas';
 
 const ArticleDetail = ({ articleId }) => {
   const [isAnonymous, setIsAnonymous] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { data: article, isLoading: articleLoading, isError: articleError } = useArticleById(articleId);
   const { data: comments, isLoading: commentsLoading, refetch: fetchComments } = useCommentsByArticleId(articleId);
@@ -52,51 +51,35 @@ const ArticleDetail = ({ articleId }) => {
 
     console.log('onSubmitComment - Final data to be sent:', commentData);
 
-    // Tampilkan loading state
-    setIsSubmitting(true);
+    try {
+      // Gunakan hook useCreateComment untuk mengirim komentar
+      createComment(commentData, {
+        onSuccess: (data) => {
+          console.log('Comment created successfully:', data);
+          
+          // Reset form menggunakan react-hook-form
+          reset({
+            content: '',
+            name: '',
+            email: ''
+          });
+          setIsAnonymous(false);
 
-    // Log untuk debugging
-    console.log('Memanggil createComment dengan data:', commentData);
-    console.log('createComment adalah:', typeof createComment);
-
-    // Gunakan fetch API langsung untuk debugging
-    fetch('http://localhost:3002/api/comments', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(commentData),
-    })
-      .then(response => {
-        console.log('Fetch API response status:', response.status);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          // Tampilkan pesan sukses
+          alert('Komentar berhasil dikirim!');
+          
+          // Refresh comments list
+          fetchComments();
+        },
+        onError: (error) => {
+          console.error('Failed to create comment:', error);
+          alert('Gagal mengirim komentar: ' + (error.response?.data?.message || error.message));
         }
-        return response.json();
-      })
-      .then(data => {
-        console.log('Fetch API success:', data);
-        // Reset form menggunakan react-hook-form
-        reset({
-          content: '',
-          name: '',
-          email: ''
-        });
-        setIsAnonymous(false);
-
-        // Tampilkan pesan sukses
-        alert('Komentar berhasil dikirim!');
-
-        // Muat ulang komentar
-        fetchComments();
-      })
-      .catch(error => {
-        console.error('Fetch API error:', error);
-        alert('Gagal mengirim komentar: ' + error.message);
-      })
-      .finally(() => {
-        setIsSubmitting(false);
       });
+    } catch (error) {
+      console.error('Exception in onSubmitComment:', error);
+      alert('Terjadi kesalahan saat mengirim komentar');
+    }
   };
 
   if (articleLoading) {
@@ -207,7 +190,6 @@ const ArticleDetail = ({ articleId }) => {
               className="w-full p-4 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white min-h-[150px] pl-12"
               placeholder="Tulis komentar Anda di sini..."
               {...register('content')}
-              disabled={isSubmitting}
             />
             <div className="absolute top-4 left-4 text-green-500 dark:text-green-400">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -242,7 +224,6 @@ const ArticleDetail = ({ articleId }) => {
                   className="w-full p-3 pl-10 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
                   placeholder="Nama"
                   {...register('name')}
-                  disabled={isSubmitting}
                 />
                 <div className="absolute top-3 left-3 text-gray-400">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -258,7 +239,6 @@ const ArticleDetail = ({ articleId }) => {
                   className="w-full p-3 pl-10 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
                   placeholder="Email (opsional)"
                   {...register('email')}
-                  disabled={isSubmitting}
                 />
                 <div className="absolute top-3 left-3 text-gray-400">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -272,25 +252,14 @@ const ArticleDetail = ({ articleId }) => {
 
           <button
             type="submit"
-            disabled={isSubmitting}
             className="bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 flex items-center justify-center w-full sm:w-auto"
           >
-            {isSubmitting ? (
-              <>
-                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                Mengirim...
-              </>
-            ) : (
-              <>
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                </svg>
-                Kirim Komentar
-              </>
-            )}
+            <>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+              </svg>
+              Kirim Komentar
+            </>
           </button>
         </form>
 
@@ -306,10 +275,10 @@ const ArticleDetail = ({ articleId }) => {
                 <div className="flex justify-between items-center mb-3">
                   <div className="flex items-center">
                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-400 to-green-600 dark:from-green-500 dark:to-green-700 flex items-center justify-center text-white font-bold text-lg shadow-sm">
-                      {comment.isAnonymous ? 'A' : comment.user?.name.charAt(0).toUpperCase()}
+                      {comment.isAnonymous ? 'A' : (comment.name ? comment.name.charAt(0).toUpperCase() : 'U')}
                     </div>
                     <h5 className="font-medium text-gray-900 dark:text-gray-100 ml-3">
-                      {comment.isAnonymous ? 'Anonim' : comment.user?.name}
+                      {comment.isAnonymous ? 'Anonim' : comment.name}
                     </h5>
                   </div>
                   <span className="text-sm text-gray-500 dark:text-gray-400 flex items-center">

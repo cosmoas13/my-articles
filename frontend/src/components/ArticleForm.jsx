@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 import { useZodForm, useCategories, useTags, useCreateArticle, useUpdateArticle } from '../hooks';
 import { articleSchema } from '../schemas';
 
-const ArticleForm = ({ article = null }) => {
+const ArticleForm = ({ article = null, onSuccess }) => {
   const [selectedTags, setSelectedTags] = useState([]);
   const [newTag, setNewTag] = useState('');
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const { data: categories } = useCategories();
   const { data: tags } = useTags();
@@ -46,18 +47,56 @@ const ArticleForm = ({ article = null }) => {
 
   const onSubmit = (data) => {
     console.log('Form data before submit:', data); // Log data sebelum dikirim
+
+    // Proses tag untuk memisahkan tag yang sudah ada dan tag baru
+    const existingTags = [];
+    const newTagNames = [];
+
+    selectedTags.forEach(tag => {
+      if (tag.isNew) {
+        // Ini adalah tag baru, kirim namanya saja
+        newTagNames.push(tag.name);
+      } else {
+        // Ini adalah tag yang sudah ada di database, kirim ID-nya
+        existingTags.push(tag.id);
+      }
+    });
+
     const articleData = {
       ...data,
-      tags: selectedTags.map(tag => tag.id),
+      tags: [...existingTags, ...newTagNames], // Gabungkan tag yang sudah ada dan tag baru
       isPublished: data.isPublished // Pastikan isPublished dimasukkan
     };
 
     console.log('Article data to be sent:', articleData); // Log data yang akan dikirim
 
     if (isEditing) {
-      updateArticle({ id: article.id, ...articleData });
+      updateArticle({ 
+        id: article.id, 
+        ...articleData 
+      }, {
+        onSuccess: (data) => {
+          setShowSuccess(true);
+          // Panggil callback onSuccess jika disediakan
+          setTimeout(() => {
+            if (onSuccess) {
+              onSuccess(data);
+            }
+          }, 2000);
+        }
+      });
     } else {
-      createArticle(articleData);
+      createArticle(articleData, {
+        onSuccess: (data) => {
+          setShowSuccess(true);
+          // Panggil callback onSuccess jika disediakan
+          setTimeout(() => {
+            if (onSuccess) {
+              onSuccess(data);
+            }
+          }, 2000);
+        }
+      });
     }
   };
 
@@ -79,7 +118,8 @@ const ArticleForm = ({ article = null }) => {
         setSelectedTags([...selectedTags, existingTag]);
       } else {
         // Tag baru yang belum ada di database
-        setSelectedTags([...selectedTags, { id: `new-${Date.now()}`, name: newTag, isNew: true }]);
+        // Gunakan nama tag sebagai ID sementara untuk tag baru
+        setSelectedTags([...selectedTags, { id: newTag, name: newTag, isNew: true }]);
       }
     }
 
@@ -91,7 +131,35 @@ const ArticleForm = ({ article = null }) => {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto">
+    <div className="w-full max-w-4xl mx-auto relative">
+      {isPending && (
+        <div className="absolute inset-0 bg-gray-900/50 z-10 flex items-center justify-center rounded-lg">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl flex flex-col items-center">
+            <svg className="animate-spin h-10 w-10 text-green-600 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <p className="text-gray-700 dark:text-gray-300 font-medium">
+              {isEditing ? 'Menyimpan artikel...' : 'Membuat artikel baru...'}
+            </p>
+          </div>
+        </div>
+      )}
+      {showSuccess && (
+        <div className="absolute inset-0 bg-gray-900/50 z-10 flex items-center justify-center rounded-lg">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl flex flex-col items-center">
+            <svg className="h-16 w-16 text-green-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            <p className="text-gray-700 dark:text-gray-300 font-medium text-xl mb-2">
+              {isEditing ? 'Artikel berhasil diperbarui!' : 'Artikel berhasil dibuat!'}
+            </p>
+            <p className="text-gray-500 dark:text-gray-400 text-center">
+              Anda akan dialihkan ke halaman artikel dalam beberapa detik...
+            </p>
+          </div>
+        </div>
+      )}
       <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 md:p-8">
         <h2 className="text-2xl font-bold mb-6 text-center text-green-700 dark:text-green-400">
           {isEditing ? 'Edit Artikel' : 'Buat Artikel Baru'}
@@ -178,6 +246,15 @@ const ArticleForm = ({ article = null }) => {
                 type="text"
                 value={newTag}
                 onChange={(e) => setNewTag(e.target.value)}
+                onKeyDown={(e) => {
+                  // Mencegah submit form ketika menekan Enter pada input tag
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (newTag.trim()) {
+                      handleAddTag();
+                    }
+                  }
+                }}
                 placeholder="Tambahkan tag..."
                 className="flex-1 p-3 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
                 disabled={isPending}

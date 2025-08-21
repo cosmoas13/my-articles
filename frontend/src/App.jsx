@@ -48,9 +48,24 @@ function App() {
       case 'article-detail':
         return <ArticleDetail articleId={selectedArticleId} />
       case 'create-article':
-        return isLoggedIn ? <ArticleForm /> : <LoginForm onLoginSuccess={handleLoginSuccess} />
+        return isLoggedIn ? (
+          <ArticleForm 
+            onSuccess={(article) => {
+              setSelectedArticleId(article.id);
+              setCurrentView('article-detail');
+            }} 
+          />
+        ) : <LoginForm onLoginSuccess={handleLoginSuccess} />
       case 'edit-article':
-        return isLoggedIn ? <ArticleForm article={{ id: selectedArticleId }} /> : <LoginForm onLoginSuccess={handleLoginSuccess} />
+        return isLoggedIn ? (
+          <ArticleForm 
+            article={{ id: selectedArticleId }} 
+            onSuccess={(article) => {
+              setSelectedArticleId(article.id);
+              setCurrentView('article-detail');
+            }}
+          />
+        ) : <LoginForm onLoginSuccess={handleLoginSuccess} />
       default:
         return <LoginForm onLoginSuccess={handleLoginSuccess} />
     }

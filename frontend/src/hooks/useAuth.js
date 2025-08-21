@@ -66,12 +66,12 @@ export const useProfile = () => {
       
       return AuthService.getProfile();
     },
-    // Selalu aktifkan query, pengecekan autentikasi dilakukan di dalam queryFn
-    enabled: true,
+    // Hanya aktifkan query jika user terautentikasi
+    enabled: AuthService.isAuthenticated(),
     retry: 1,
-    staleTime: 0, // Selalu anggap data tidak segar
-    refetchOnMount: true, // Selalu refetch saat komponen di-mount
-    refetchOnWindowFocus: true, // Refetch saat window mendapat fokus
-    refetchInterval: 30000, // Refetch setiap 30 detik
+    staleTime: 5 * 60 * 1000, // Data dianggap segar selama 5 menit
+    refetchOnMount: true, // Tetap refetch saat komponen di-mount
+    refetchOnWindowFocus: false, // Tidak perlu refetch saat window mendapat fokus
+    refetchInterval: false, // Tidak perlu refetch secara berkala
   });
 };
