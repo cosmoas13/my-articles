@@ -3,6 +3,9 @@ import { createRoot } from 'react-dom/client'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClient } from './utils/queryClient'
 import './index.css'
+import './styles/markdown.css'
+import '@uiw/react-md-editor/markdown-editor.css'
+import '@uiw/react-markdown-preview/markdown.css'
 import App from './App.jsx'
 
 createRoot(document.getElementById('root')).render(

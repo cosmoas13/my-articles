@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useZodForm, useCategories, useTags, useCreateArticle, useUpdateArticle } from '../hooks';
 import { articleSchema } from '../schemas';
+import MarkdownEditor from './MarkdownEditor';
 
 const ArticleForm = ({ article = null, onSuccess }) => {
   const [selectedTags, setSelectedTags] = useState([]);
@@ -220,14 +221,11 @@ const ArticleForm = ({ article = null, onSuccess }) => {
               htmlFor="content"
               className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
             >
-              Konten
+              Konten (Markdown)
             </label>
-            <textarea
-              id="content"
-              rows="10"
-              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:text-white"
-              placeholder="Tulis konten artikel di sini..."
-              {...register('content')}
+            <MarkdownEditor
+              value={watch('content')}
+              onChange={(value) => setValue('content', value)}
               disabled={isPending}
             />
             {errors.content && (

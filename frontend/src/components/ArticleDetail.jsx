@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { renderMarkdown } from '../utils/markdown';
 import { useArticleById, useCommentsByArticleId, useCreateComment, useZodForm } from '../hooks';
 import { getDynamicCommentSchema } from '../schemas';
 
@@ -137,13 +138,7 @@ const ArticleDetail = ({ articleId }) => {
         <div className="absolute bottom-0 left-0 w-24 h-24 bg-green-50 dark:bg-green-900/20 rounded-tr-3xl -z-10"></div>
 
         <div className="relative z-10">
-          {article?.content.split('\n').map((paragraph, index) => (
-            paragraph ?
-              <p key={index} className="mb-5 text-gray-800 dark:text-gray-200 leading-relaxed text-lg first-letter:text-3xl first-letter:font-bold first-letter:text-green-600 dark:first-letter:text-green-400 first-letter:mr-1 first-letter:float-left first:mt-0">
-                {paragraph}
-              </p>
-              : <br key={index} />
-          ))}
+          <div dangerouslySetInnerHTML={{ __html: renderMarkdown(article?.content || '') }} />
         </div>
       </div>
 

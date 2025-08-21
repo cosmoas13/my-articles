@@ -1,8 +1,15 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Layout } from './components'
 import { ArticlesPage, ArticleDetailPage, ArticleFormPage, LoginPage, NotFoundPage } from './pages'
+import { useEffect } from 'react'
+import { initializeMarked } from './utils/markdown'
 
 function App() {
+  // Inisialisasi marked saat aplikasi dimulai
+  useEffect(() => {
+    initializeMarked();
+  }, []);
+
   return (
     <Router>
       <Layout>
