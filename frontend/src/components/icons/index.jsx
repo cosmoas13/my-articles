@@ -13,7 +13,8 @@ import {
   ChevronDown,
   Facebook,
   Twitter,
-  Github
+  Github,
+  FileText
 } from 'lucide-react';
 
 export {
@@ -31,5 +32,6 @@ export {
   ChevronDown,
   Facebook,
   Twitter,
-  Github
+  Github,
+  FileText
 };
