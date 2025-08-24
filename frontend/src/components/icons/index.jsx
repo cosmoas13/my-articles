@@ -14,7 +14,9 @@ import {
   Facebook,
   Twitter,
   Github,
-  FileText
+  FileText,
+  Menu,
+  X
 } from 'lucide-react';
 
 export {
@@ -33,5 +35,7 @@ export {
   Facebook,
   Twitter,
   Github,
-  FileText
+  FileText,
+  Menu,
+  X
 };

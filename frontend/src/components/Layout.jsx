@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useProfile } from '../hooks';
-import { Home, PenSquare, User, LogIn, Moon, Sun, ImageIcon, Facebook, Twitter, Github } from './icons';
+import { Home, PenSquare, User, LogIn, Moon, Sun, ImageIcon, Facebook, Twitter, Github, Menu, X } from './icons';
 
 function Layout({ children }) {
   const [theme, setTheme] = useState('light');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { data: userProfile, isSuccess: isLoggedIn, isLoading: isProfileLoading } = useProfile();
 
   // Debug untuk melihat status profil
@@ -20,10 +21,26 @@ function Layout({ children }) {
     setTheme(theme === 'light' ? 'dark' : 'light');
   };
 
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  // Menutup menu mobile saat ukuran layar berubah ke desktop
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) { // md breakpoint di Tailwind
+        setMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <div className={`min-h-screen w-full flex flex-col bg-gray-50 dark:bg-dark text-gray-800 dark:text-gray-100 transition-colors duration-300`}>
       <header className="sticky top-0 z-50 bg-white dark:bg-dark-card shadow-lg px-4 py-3 md:px-6 lg:px-8 backdrop-blur-lg bg-opacity-90 dark:bg-opacity-90">
-        <div className="container mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="container mx-auto flex flex-row justify-between items-center gap-4">
           <div className="flex items-center space-x-2">
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
               <ImageIcon size={20} className="text-white" />
@@ -36,21 +53,22 @@ function Layout({ children }) {
             </Link>
           </div>
 
-          <div className="flex items-center gap-3 md:gap-4">
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-3 md:gap-4">
             <nav className="flex gap-2 md:gap-3">
               <Link
                 to="/"
                 className="px-4 py-2 rounded-lg transition-all duration-200 flex items-center bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 hover:bg-primary-200 dark:hover:bg-primary-800/50 transition-colors"
               >
                 <Home size={18} className="mr-1.5" />
-                Beranda
+                Home
               </Link>
               <Link
                 to="/about"
                 className="px-4 py-2 rounded-lg transition-all duration-200 flex items-center bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 hover:bg-primary-200 dark:hover:bg-primary-800/50 transition-colors"
               >
                 <User size={18} className="mr-1.5" />
-                Tentang
+                About Me
               </Link>
               {isLoggedIn ? (
                 <>
@@ -91,6 +109,125 @@ function Layout({ children }) {
                 <Sun size={18} className="text-yellow-400" />
               )}
             </button>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <div className="flex md:hidden items-center gap-2">
+            <button
+              onClick={toggleTheme}
+              className="p-2.5 rounded-lg bg-gray-100 dark:bg-dark-card hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+              aria-label="Toggle theme"
+            >
+              {theme === 'light' ? (
+                <Moon size={18} className="text-gray-700" />
+              ) : (
+                <Sun size={18} className="text-yellow-400" />
+              )}
+            </button>
+
+            <button
+              onClick={toggleMobileMenu}
+              className="p-2.5 rounded-lg bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 hover:bg-primary-200 dark:hover:bg-primary-800/50 transition-colors"
+              aria-label="Toggle mobile menu"
+            >
+              <Menu size={24} />
+            </button>
+          </div>
+
+          {/* Mobile Menu Overlay */}
+          <div
+            className={`fixed h-screen inset-0 z-50 bg-white dark:bg-dark-card bg-opacity-100 dark:bg-opacity-100 flex flex-col p-5 transition-all duration-300 ease-in-out transform ${mobileMenuOpen ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0 pointer-events-none'}`}
+          >
+            <div className="flex justify-between items-center mb-8">
+              <div className="flex items-center space-x-2">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
+                  <ImageIcon size={20} className="text-white" />
+                </div>
+                <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-green-400 dark:from-green-400 dark:to-green-300">
+                  cosmoas13
+                </span>
+              </div>
+              <button
+                onClick={toggleMobileMenu}
+                className="p-2.5 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                aria-label="Close menu"
+              >
+                <X size={24} className="text-gray-700 dark:text-gray-300" />
+              </button>
+            </div>
+
+            <nav className="flex flex-col gap-4 items-center justify-center flex-grow">
+              <Link
+                to="/"
+                className="w-full px-4 py-4 rounded-lg transition-all duration-200 flex items-center justify-center bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 hover:bg-primary-200 dark:hover:bg-primary-800/50 transition-colors text-lg font-medium"
+                onClick={toggleMobileMenu}
+              >
+                <Home size={22} className="mr-3" />
+                Home
+              </Link>
+              <Link
+                to="/about"
+                className="w-full px-4 py-4 rounded-lg transition-all duration-200 flex items-center justify-center bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 hover:bg-primary-200 dark:hover:bg-primary-800/50 transition-colors text-lg font-medium"
+                onClick={toggleMobileMenu}
+              >
+                <User size={22} className="mr-3" />
+                About Me
+              </Link>
+              {isLoggedIn ? (
+                <>
+                  <Link
+                    to="/articles/create"
+                    className="w-full px-4 py-4 rounded-lg transition-all duration-200 flex items-center justify-center bg-primary-600 text-white hover:bg-primary-700 transition-colors text-lg font-medium"
+                    onClick={toggleMobileMenu}
+                  >
+                    <PenSquare size={22} className="mr-3" />
+                    Tulis
+                  </Link>
+                  <button
+                    className="w-full px-4 py-4 rounded-lg transition-all duration-200 flex items-center justify-center bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors text-lg font-medium"
+                    onClick={() => {
+                      console.log('Current user profile:', userProfile);
+                      toggleMobileMenu();
+                    }}
+                  >
+                    <User size={22} className="mr-3" />
+                    {userProfile?.name || 'Profil'}
+                  </button>
+                </>
+              ) : (
+                <Link
+                  to="/login"
+                  className="w-full px-4 py-4 rounded-lg transition-all duration-200 flex items-center justify-center bg-primary-600 text-white hover:bg-primary-700 transition-colors text-lg font-medium"
+                  onClick={toggleMobileMenu}
+                >
+                  <LogIn size={22} className="mr-3" />
+                  Login
+                </Link>
+              )}
+
+              <div className="flex items-center mt-6">
+                <span className="mr-3 text-gray-700 dark:text-gray-300">Mode Tema:</span>
+                <button
+                  onClick={() => {
+                    toggleTheme();
+                  }}
+                  className="p-3 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors flex items-center"
+                  aria-label="Toggle theme"
+                >
+                  {theme === 'light' ? (
+                    <>
+                      <Moon size={20} className="text-gray-700 mr-2" />
+                      <span>Mode Gelap</span>
+                    </>
+                  ) : (
+                    <>
+                      <Sun size={20} className="text-yellow-400 mr-2" />
+                      <span>Mode Terang</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </nav>
           </div>
         </div>
       </header>
